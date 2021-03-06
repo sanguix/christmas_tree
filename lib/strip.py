@@ -4,7 +4,7 @@ import board
 import neopixel
 import time
 
-class Pixels(object):
+class Strip(object):
     def __init__(self, size = 50, pin = board.D18):
         self.size = size
         strip = neopixel.NeoPixel(pin, size)
