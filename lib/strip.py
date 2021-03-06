@@ -7,7 +7,7 @@ import time
 class Strip(object):
     def __init__(self, size = 50, pin = board.D18):
         self.size = size
-        strip = neopixel.NeoPixel(pin, size)
+        self.strip = neopixel.NeoPixel(pin, size)
 
     def reset_lights(self):
         self.strip.fill((0, 0, 0))
