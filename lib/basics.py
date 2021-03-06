@@ -8,21 +8,21 @@ SIZE = 50
 pixels = neopixel.NeoPixel(board.D18, SIZE)
 
 
-def reset():
+def reset_lights():
     for i in range(SIZE):
         pixels[i] = (0, 0, 0)
 
 
-def ligth_monocrome(color=(255, 0, 0), delay=0.05, reset=True):
-    if reset:
-        reset()
+def ligth_monocrome(color=(255, 0, 0), delay=0.05, reset_lights=True):
+    if reset_lights:
+        reset_lights()
     for i in range(SIZE):
         pixels[i] = color
         time.sleep(delay)
 
 
 def right_left_right(color1=(255, 0, 0), color2=(0,0,255), delay=0.05):
-    reset()
+    reset_lights()
     for i in range(SIZE):
         pixels[i] = color1
         time.sleep(delay)
@@ -47,7 +47,7 @@ def move_with_tail(delay=0.1, lenght=5, reverse=False):
 
 
 def go_and_back(delay=0.05, lenght=5, times=10):
-    reset()
+    reset_lights()
     for _ in range(times):
         move_with_tail(delay, lenght)
         move_with_tail(delay, lenght, True)
