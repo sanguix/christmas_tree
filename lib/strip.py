@@ -5,7 +5,7 @@ import board
 import neopixel
 
 class Strip(object):
-    def __init__(self, size = 50, pin = board.D18):
+    def __init__(self, size=50, pin=board.D18):
         self.size = size
         self.strip = neopixel.NeoPixel(pin, size)
 
@@ -14,7 +14,7 @@ class Strip(object):
 
     def monochrome(self, color=(255, 0, 0), delay=0.05, reset_before=True):
         if reset_before:
-            reset_lights()
+            self.reset_lights()
 
         if delay == 0:
             self.strip.fill(color)
@@ -24,7 +24,7 @@ class Strip(object):
                 time.sleep(delay)
 
 
-    def right_left_right(self, color1=(255, 0, 0), color2=(0,0,255), delay=0.05):
+    def right_left_right(self, color1=(255, 0, 0), color2=(0, 0, 255), delay=0.05):
         self.reset_lights()
         for i in range(self.size):
             self.strip[i] = color1
@@ -54,4 +54,3 @@ class Strip(object):
         for _ in range(times):
             self.move_with_tail(delay, lenght)
             self.move_with_tail(delay, lenght, True)
-              
