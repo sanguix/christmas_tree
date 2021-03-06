@@ -1,8 +1,8 @@
 # coding: utf-8
 
+import time
 import board
 import neopixel
-import time
 
 class Strip(object):
     def __init__(self, size = 50, pin = board.D18):
