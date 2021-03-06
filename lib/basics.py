@@ -12,12 +12,16 @@ def reset_lights():
     pixels.fill((0, 0, 0))
 
 
-def monochrome(color=(255, 0, 0), delay=0.05, reset_lights=True):
-    if reset_lights:
+def monochrome(color=(255, 0, 0), delay=0.05, reset_before=True):
+    if reset_before:
         reset_lights()
-    for i in range(SIZE):
-        pixels[i] = color
-        time.sleep(delay)
+
+    if delay == 0:
+        pixels.fill(color)
+    else:
+        for i in range(SIZE):
+            pixels[i] = color
+            time.sleep(delay)
 
 
 def right_left_right(color1=(255, 0, 0), color2=(0,0,255), delay=0.05):
