@@ -13,7 +13,7 @@ def reset_lights():
         pixels[i] = (0, 0, 0)
 
 
-def ligth_monocrome(color=(255, 0, 0), delay=0.05, reset_lights=True):
+def monochrome(color=(255, 0, 0), delay=0.05, reset_lights=True):
     if reset_lights:
         reset_lights()
     for i in range(SIZE):
