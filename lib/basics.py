@@ -9,8 +9,7 @@ pixels = neopixel.NeoPixel(board.D18, SIZE)
 
 
 def reset_lights():
-    for i in range(SIZE):
-        pixels[i] = (0, 0, 0)
+    pixels.fill((0, 0, 0))
 
 
 def monochrome(color=(255, 0, 0), delay=0.05, reset_lights=True):
