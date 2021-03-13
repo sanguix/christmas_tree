@@ -16,8 +16,6 @@ def check_color(color):
         raise ValueError(f'Color should be a list of 3 integer, not {color}')
 
     for item in color:
-        print(type(item))
-        print(item)
         if not isinstance(item, int):
             raise ValueError(f'Color should be a list of 3 integer, but {item} was found')
 
