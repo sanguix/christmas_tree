@@ -4,7 +4,7 @@ import time
 import board
 import neopixel
 
-class Strip(object):
+class Strip():
     PIXELS_ORDER = neopixel.RGB
     def __init__(self, size=50, pin=board.D18):
         self.size = size
@@ -46,11 +46,11 @@ class Strip(object):
             for i, j in zip(central_color, color_step):
                 color.append(i - (offset * j))
             pos = center - offset
-            if (pos >= 0):
+            if pos >= 0:
                 strip[pos] = color
 
             pos = center + offset
-            if (pos < self.size):
+            if pos < self.size:
                 strip[pos] = color
         strip.show()
 
