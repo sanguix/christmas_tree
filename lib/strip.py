@@ -17,12 +17,15 @@ class Strip():
     def __getitem__(self, index):
         return self.pixels[index]
 
-    def reset_lights(self):
-        self.pixels.fill((0, 0, 0))
+    def fill(self, color):
+        self.pixels.fill(color)
 
-    def monochrome(self, color=(255, 0, 0), delay=0.05, reset_before=True):
+    def turn_off(self):
+        self.fill((0, 0, 0))
+
+    def progressive_fill(self, color=(255, 0, 0), delay=0.05, reset_before=True):
         if reset_before:
-            self.reset_lights()
+            self.turn_off()
 
         if delay == 0:
             self.pixels.fill(color)
@@ -32,7 +35,7 @@ class Strip():
                 time.sleep(delay)
 
     def right_left_right(self, color1=(255, 0, 0), color2=(0, 0, 255), delay=0.05):
-        self.reset_lights()
+        self.turn_off()
         for i in range(self.size):
             self.pixels[i] = color1
             time.sleep(delay)
@@ -67,7 +70,7 @@ class Strip():
             time.sleep(delay)
 
     def go_and_back(self, delay=0.05, length=5, color=(255, 255, 255), times=10):
-        self.reset_lights()
+        self.turn_off()
         for _ in range(times):
             self.move_with_tail(delay, length, color)
             self.move_with_tail(delay, length, color, True)
