@@ -11,6 +11,12 @@ class Strip():
         self.pin = pin
         self.pixels = neopixel.NeoPixel(pin=pin, n=size, pixel_order=self.PIXELS_ORDER)
 
+    def __setitem__(self, index, val):
+        self.pixels[index] = val
+
+    def __getitem__(self, index):
+        return self.pixels[index]
+
     def reset_lights(self):
         self.pixels.fill((0, 0, 0))
 
