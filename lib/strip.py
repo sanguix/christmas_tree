@@ -4,19 +4,28 @@ import time
 import board
 import neopixel
 
-class Strip(object):
+class Strip():
     PIXELS_ORDER = neopixel.RGB
     def __init__(self, size=50, pin=board.D18):
         self.size = size
         self.pin = pin
         self.pixels = neopixel.NeoPixel(pin=pin, n=size, pixel_order=self.PIXELS_ORDER)
 
-    def reset_lights(self):
-        self.pixels.fill((0, 0, 0))
+    def __setitem__(self, index, val):
+        self.pixels[index] = val
 
-    def monochrome(self, color=(255, 0, 0), delay=0.05, reset_before=True):
+    def __getitem__(self, index):
+        return self.pixels[index]
+
+    def fill(self, color):
+        self.pixels.fill(color)
+
+    def turn_off(self):
+        self.fill((0, 0, 0))
+
+    def progressive_fill(self, color=(255, 0, 0), delay=0.05, reset_before=True):
         if reset_before:
-            self.reset_lights()
+            self.turn_off()
 
         if delay == 0:
             self.pixels.fill(color)
@@ -26,7 +35,7 @@ class Strip(object):
                 time.sleep(delay)
 
     def right_left_right(self, color1=(255, 0, 0), color2=(0, 0, 255), delay=0.05):
-        self.reset_lights()
+        self.turn_off()
         for i in range(self.size):
             self.pixels[i] = color1
             time.sleep(delay)
@@ -46,11 +55,11 @@ class Strip(object):
             for i, j in zip(central_color, color_step):
                 color.append(i - (offset * j))
             pos = center - offset
-            if (pos >= 0):
+            if pos >= 0:
                 strip[pos] = color
 
             pos = center + offset
-            if (pos < self.size):
+            if pos < self.size:
                 strip[pos] = color
         strip.show()
 
@@ -61,7 +70,7 @@ class Strip(object):
             time.sleep(delay)
 
     def go_and_back(self, delay=0.05, length=5, color=(255, 255, 255), times=10):
-        self.reset_lights()
+        self.turn_off()
         for _ in range(times):
             self.move_with_tail(delay, length, color)
             self.move_with_tail(delay, length, color, True)
