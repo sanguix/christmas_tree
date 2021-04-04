@@ -2,8 +2,8 @@ import numpy as np
 from picamera import PiCamera
 
 class Camera():
-    def __init__(self, resolution=(320, 240)):
-        self.resolution = resolution
+    def __init__(self, resolution=(640, 480)):
+        self.resolution = resolution # (1920, 1088)
         self.image_size = (self.resolution[0], self.resolution[1], 3)
         self.camera = PiCamera()
         self.camera.resolution = self.resolution
