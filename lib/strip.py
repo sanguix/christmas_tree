@@ -6,10 +6,12 @@ import neopixel
 
 class Strip():
     PIXELS_ORDER = neopixel.RGB
+    MAX_BRIGHTNESS = 0.5
+
     def __init__(self, size=50, pin=board.D18):
         self.size = size
         self.pin = pin
-        self.pixels = neopixel.NeoPixel(pin=pin, n=size, pixel_order=self.PIXELS_ORDER)
+        self.pixels = neopixel.NeoPixel(pin=pin, n=size, pixel_order=self.PIXELS_ORDER, brightness=self.MAX_BRIGHTNESS)
 
     def __setitem__(self, index, val):
         self.pixels[index] = val
