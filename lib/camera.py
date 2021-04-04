@@ -13,3 +13,6 @@ class Camera():
         data = np.empty(self.image_size, dtype=np.uint8)
         self.camera.capture(data, 'rgb')
         return data
+
+    def frame_to_file(self, file_name):
+        self.camera.capture(file_name)
