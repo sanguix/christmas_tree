@@ -25,7 +25,7 @@ class Strip():
     def turn_off(self):
         self.fill((0, 0, 0))
 
-    def progressive_fill(self, color=(255, 0, 0), delay=0.05, reset_before=True):
+    def progressive_fill(self, color=(255, 255, 255), delay=0.05, reset_before=False):
         if reset_before:
             self.turn_off()
 
