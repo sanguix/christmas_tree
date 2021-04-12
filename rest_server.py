@@ -34,6 +34,13 @@ def progress_fill():
     strip.progressive_fill(color=color)
     return "OK"
 
+
+@app.route("/off", methods=['POST'])
+def turn_off():
+    strip.turn_off()
+    return "OK"
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=80, host='0.0.0.0')
 
