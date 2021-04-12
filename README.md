@@ -10,6 +10,15 @@ To install them run:
 
 ## Execution
 
-Super user permission is needed to access to GPIO pins and
-/dev/mem.
+Superuser permission is needed to access to GPIO pins and
+/dev/mem, so any tool that uses this library should be executed
+with 'sudo'
 
+## Restful API server
+
+The restful API server allows to change the lights using HTTP
+requests.
+
+### Start the server
+
+    sudo ./rest_server.py
