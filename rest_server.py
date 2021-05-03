@@ -22,11 +22,11 @@ def turn_off():
     return "OK"
 
 
-@app.route("/go_and_back", methods=['POST'])
-def go_and_back():
+@app.route("/scanner", methods=['POST'])
+def scanner():
     data = request.get_json(force=True)
     color = hexa_to_rgb(data.get('color'))
-    strip.go_and_back(color=color, times=3)
+    strip.scanner_effect(color=color)
     return "OK"
 
 

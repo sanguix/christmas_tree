@@ -81,37 +81,39 @@ class Strip():
             self.pixels[i] = color2
             time.sleep(delay)
 
-    def draw_fadeout_line(self, center, length, central_color=(255, 255, 255)):
-        self.stop_any_sequence()
-        strip = neopixel.NeoPixel(self.pin, self.size, pixel_order=self.PIXELS_ORDER, auto_write=False)
+    def get_fadeout_lights(self, center, length, central_color=(255, 255, 255)):
+        lights = [(0, 0, 0)] * self.size
 
         radio = int(length/2) + 1
         color_step = [x/radio for x in central_color]
 
-        strip[center] = central_color
+        lights[center] = central_color
         for offset in range(1, 1 + radio):
             color = []
             for i, j in zip(central_color, color_step):
                 color.append(i - (offset * j))
+
             pos = center - offset
             if pos >= 0:
-                strip[pos] = color
+                lights[pos] = color
 
             pos = center + offset
             if pos < self.size:
-                strip[pos] = color
-        strip.show()
+                lights[pos] = color
 
-    def move_with_tail(self, delay=0.1, length=5, color=(255, 255, 255), reverse=False):
-        self.stop_any_sequence()
+        return lights
+
+    def scanner_effect_generator(self, delay=0.1, length=5, color=(255, 255, 255), reverse=False):
         iterator = reversed(range(self.size)) if reverse else range(self.size)
         for i in iterator:
-            self.draw_fadeout_line(i, length, color)
             time.sleep(delay)
+            yield self.get_fadeout_lights(i, length, color)
 
-    def go_and_back(self, delay=0.05, length=5, color=(255, 255, 255), times=10):
-        self.stop_any_sequence()
-        self.turn_off()
-        for _ in range(times):
-            self.move_with_tail(delay, length, color)
-            self.move_with_tail(delay, length, color, True)
+    def scanner_effect(self, delay=0.05, length=15, color=(255, 255, 255)):
+        def generator(delay, length, color):
+            reverse = False
+            while True:
+                for lights in self.scanner_effect_generator(delay, length, color, reverse):
+                    yield lights
+                reverse = not reverse
+        self.start_sequence(generator(delay, length, color))
