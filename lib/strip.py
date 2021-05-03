@@ -1,8 +1,11 @@
 # coding: utf-8
 
 import time
+import threading
+
 import board
 import neopixel
+
 
 class Strip():
     PIXELS_ORDER = neopixel.RGB
@@ -12,6 +15,8 @@ class Strip():
         self.size = size
         self.pin = pin
         self.pixels = neopixel.NeoPixel(pin=pin, n=size, pixel_order=self.PIXELS_ORDER, brightness=self.MAX_BRIGHTNESS)
+        self.thread = None
+        self.stop_sequence = False
 
     def __setitem__(self, index, val):
         self.pixels[index] = val
@@ -25,16 +30,39 @@ class Strip():
     def turn_off(self):
         self.fill((0, 0, 0))
 
-    def progressive_fill(self, color=(255, 255, 255), delay=0.05, reset_before=False):
-        if reset_before:
-            self.turn_off()
+    def start_sequence(self, generator):
+        if self.thread is not None:
+            self.stop_sequence = True
+            self.thread.join()
+            self.stop_sequence = False
+        self.thread = threading.Thread(target=self._sequencer, args=(generator,))
+        self.thread.start()
 
-        if delay == 0:
-            self.pixels.fill(color)
-        else:
-            for i in range(self.size):
-                self.pixels[i] = color
-                time.sleep(delay)
+    def _sequencer(self, generator):
+        strip = neopixel.NeoPixel(self.pin, self.size, pixel_order=self.PIXELS_ORDER, auto_write=False)
+        for item in generator:
+            if self.stop_sequence:
+                return
+            for pos, color in enumerate(item):
+                if color is None:
+                    continue
+                strip[pos] = color
+            strip.show()
+
+    def progressive_fill(self, color=(255, 255, 255), delay=0.05, reset_before=False):
+        def generator(color, delay, reset_before=False):
+            if reset_before:
+                yield [(0, 0, 0)] * self.size
+
+            if delay == 0:
+                yield [color] * self.size
+            else:
+                new_map = [None] * self.size
+                for i in range(self.size):
+                    time.sleep(delay)
+                    new_map[i] = color
+                    yield new_map
+        self.start_sequence(generator(color, delay, reset_before))
 
     def right_left_right(self, color1=(255, 0, 0), color2=(0, 0, 255), delay=0.05):
         self.turn_off()
