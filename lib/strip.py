@@ -19,22 +19,29 @@ class Strip():
         self.stop_sequence = False
 
     def __setitem__(self, index, val):
+        self.stop_any_sequence()
         self.pixels[index] = val
 
     def __getitem__(self, index):
+        self.stop_any_sequence()
         return self.pixels[index]
 
     def fill(self, color):
+        self.stop_any_sequence()
         self.pixels.fill(color)
 
     def turn_off(self):
+        self.stop_any_sequence()
         self.fill((0, 0, 0))
 
-    def start_sequence(self, generator):
+    def stop_any_sequence(self):
         if self.thread is not None:
             self.stop_sequence = True
             self.thread.join()
-            self.stop_sequence = False
+
+    def start_sequence(self, generator):
+        self.stop_any_sequence()
+        self.stop_sequence = False
         self.thread = threading.Thread(target=self._sequencer, args=(generator,))
         self.thread.start()
 
@@ -65,6 +72,7 @@ class Strip():
         self.start_sequence(generator(color, delay, reset_before))
 
     def right_left_right(self, color1=(255, 0, 0), color2=(0, 0, 255), delay=0.05):
+        self.stop_any_sequence()
         self.turn_off()
         for i in range(self.size):
             self.pixels[i] = color1
@@ -74,6 +82,7 @@ class Strip():
             time.sleep(delay)
 
     def draw_fadeout_line(self, center, length, central_color=(255, 255, 255)):
+        self.stop_any_sequence()
         strip = neopixel.NeoPixel(self.pin, self.size, pixel_order=self.PIXELS_ORDER, auto_write=False)
 
         radio = int(length/2) + 1
@@ -94,12 +103,14 @@ class Strip():
         strip.show()
 
     def move_with_tail(self, delay=0.1, length=5, color=(255, 255, 255), reverse=False):
+        self.stop_any_sequence()
         iterator = reversed(range(self.size)) if reverse else range(self.size)
         for i in iterator:
             self.draw_fadeout_line(i, length, color)
             time.sleep(delay)
 
     def go_and_back(self, delay=0.05, length=5, color=(255, 255, 255), times=10):
+        self.stop_any_sequence()
         self.turn_off()
         for _ in range(times):
             self.move_with_tail(delay, length, color)
